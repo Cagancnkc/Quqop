@@ -1,53 +1,99 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #f5f5f5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      color: #333;
-    }
-
-    .container {
-      background: #fff;
-      border-radius: 12px;
-      padding: 48px 64px;
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-      text-align: center;
-      max-width: 480px;
-      width: 90%;
-    }
-
-    h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 16px;
-    }
-
-    p {
-      font-size: 1rem;
-      color: #666;
-      line-height: 1.6;
-    }
-  </style>
+  <title>Excel AI Manager</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>Welcome</h1>
-    <p>Your website is up and running.</p>
-  </div>
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">📊</span>
+        <span class="logo-text">Excel AI Manager</span>
+      </div>
+      <nav class="nav">
+        <a href="#upload" class="nav-link">Yükle</a>
+        <a href="#table" class="nav-link">Tablo</a>
+        <a href="#ai" class="nav-link">AI Analiz</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <!-- Upload Section -->
+    <section id="upload" class="section">
+      <h2 class="section-title">Excel Dosyası Yükle</h2>
+      <div class="upload-area" id="uploadArea">
+        <div class="upload-icon">📁</div>
+        <p class="upload-text">Dosyayı sürükleyip bırakın veya seçin</p>
+        <p class="upload-hint">.xlsx, .xls, .csv desteklenir</p>
+        <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" hidden />
+        <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+          Dosya Seç
+        </button>
+      </div>
+      <div class="file-info" id="fileInfo" style="display:none;">
+        <span class="file-name" id="fileName"></span>
+        <button class="btn btn-danger btn-sm" onclick="clearFile()">Kaldır</button>
+      </div>
+    </section>
+
+    <!-- Table Section -->
+    <section id="table" class="section">
+      <div class="section-header">
+        <h2 class="section-title">Veri Tablosu</h2>
+        <div class="table-actions">
+          <input type="text" id="searchInput" class="search-input" placeholder="Ara..." oninput="filterTable()" />
+          <button class="btn btn-secondary btn-sm" onclick="exportCSV()">CSV İndir</button>
+        </div>
+      </div>
+      <div class="table-wrapper" id="tableWrapper">
+        <div class="empty-state">
+          <span class="empty-icon">📋</span>
+          <p>Henüz dosya yüklenmedi.</p>
+        </div>
+      </div>
+      <div class="pagination" id="pagination"></div>
+    </section>
+
+    <!-- AI Section -->
+    <section id="ai" class="section">
+      <h2 class="section-title">AI Analiz</h2>
+      <div class="ai-stats" id="aiStats">
+        <div class="stat-card">
+          <span class="stat-label">Toplam Satır</span>
+          <span class="stat-value" id="statRows">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Toplam Sütun</span>
+          <span class="stat-value" id="statCols">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Dolu Hücre</span>
+          <span class="stat-value" id="statFilled">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Boş Hücre</span>
+          <span class="stat-value" id="statEmpty">—</span>
+        </div>
+      </div>
+      <div class="ai-chat">
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-bubble assistant">
+            Merhaba! Excel verileriniz hakkında sorular sorabilirsiniz.
+          </div>
+        </div>
+        <div class="chat-input-row">
+          <input type="text" id="chatInput" class="chat-input" placeholder="Sorunuzu yazın..." onkeydown="if(event.key==='Enter') sendMessage()" />
+          <button class="btn btn-primary" onclick="sendMessage()">Gönder</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
